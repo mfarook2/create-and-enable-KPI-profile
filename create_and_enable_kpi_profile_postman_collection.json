@@ -1,0 +1,223 @@
+{
+	"info": {
+		"_postman_id": "3a27b285-bef5-4489-aea5-bb9ffc136dbc",
+		"name": "Creating and Enabling KPI Profiles",
+		"description": "The steps to enable a KPI Profile on a router\n1. Get Ticket\n2. Get Token\n3. Create a KPI Profile\n4. Enable a KPI Profile.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Ticket",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"ticket\", responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Accept",
+						"value": "text/plain"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://{{crosswork_ip}}:30603/crosswork/sso/v1/tickets?username={{username}}&password={{password}}",
+					"protocol": "https",
+					"host": [
+						"{{crosswork_ip}}"
+					],
+					"port": "30603",
+					"path": [
+						"crosswork",
+						"sso",
+						"v1",
+						"tickets"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{username}}"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"token\", responseBody);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Accept",
+						"value": "text/plain"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "service",
+							"value": "https://{{crosswork_ip}}:30603/app-dashboard",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://{{crosswork_ip}}:30603/crosswork/sso/v1/tickets/{{ticket}}",
+					"protocol": "https",
+					"host": [
+						"{{crosswork_ip}}"
+					],
+					"port": "30603",
+					"path": [
+						"crosswork",
+						"sso",
+						"v1",
+						"tickets",
+						"{{ticket}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a KPI Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"\",\n    \"name\": \"system\",\n    \"description\": \"Set of KPI's to be enabled on all the Edge Routers\",\n    \"kpis\": [\n        {\n            \"kpi_id\": \"pulse_interface_flap_detector\",\n            \"cadence\": 300,\n            \"alerting\": false,\n            \"downsample_factor\": 1\n        },\n        {\n            \"kpi_id\": \"pulse_interface_state_info\",\n            \"cadence\": 300,\n            \"alerting\": true,\n            \"downsample_factor\": 1\n        },\n        {\n            \"kpi_id\": \"pulse_interface_bandwidth_utilization\",\n            \"cadence\": 60,\n            \"alerting\": false,\n            \"downsample_factor\": 1\n        },\n        {\n            \"kpi_id\": \"pulse_interface_error_counters\",\n            \"cadence\": 60,\n            \"alerting\": true,\n            \"downsample_factor\": 1\n        },\n        {\n            \"kpi_id\": \"pulse_interface_packet_counters\",\n            \"cadence\": 60,\n            \"alerting\": true,\n            \"downsample_factor\": 1\n        },\n        {\n            \"kpi_id\": \"pulse_interface_rate_counters\",\n            \"cadence\": 60,\n            \"alerting\": true,\n            \"downsample_factor\": 1\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "https://{{crosswork_ip}}:30603/crosswork/hi/v1/kpiprofilemgmt/write",
+					"protocol": "https",
+					"host": [
+						"{{crosswork_ip}}"
+					],
+					"port": "30603",
+					"path": [
+						"crosswork",
+						"hi",
+						"v1",
+						"kpiprofilemgmt",
+						"write"
+					]
+				},
+				"description": "Use this API Call to Create KPI Profiles on the Crosswork Health Insights Application."
+			},
+			"response": []
+		},
+		{
+			"name": "Enable a KPI Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"devices\": [\n        \"Node-4\",\n        \"Node-5\"\n    ],\n    \"kpi_profiles\": [ \"system\"]\n}"
+				},
+				"url": {
+					"raw": "https://{{crosswork_ip}}:30603/crosswork/hi/v1/kpiprofileassoc/write",
+					"protocol": "https",
+					"host": [
+						"{{crosswork_ip}}"
+					],
+					"port": "30603",
+					"path": [
+						"crosswork",
+						"hi",
+						"v1",
+						"kpiprofileassoc",
+						"write"
+					]
+				},
+				"description": "Use this API Call to enable single/mulitple KPI Profiles on single/multiple devices on the Crosswork Health Insights Application."
+			},
+			"response": []
+		}
+	]
+}
